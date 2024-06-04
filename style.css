@@ -21,7 +21,7 @@ main {
 }
 
 section {
-  width: 50%; /* Adjust width for two columns */
+  width: 80%; /* Adjust width for two columns */
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
