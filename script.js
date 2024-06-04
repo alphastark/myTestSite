@@ -1,52 +1,62 @@
-const mangaListContainer = document.getElementById('mangaList');
-const updateButton = document.getElementById('updateButton');
+const animeList = document.getElementById('anime-list');
+const mangaList = document.getElementById('manga-list');
+const updateButton = document.getElementById('update-button');
 
-async function loadMangaData() {
-    try {
-        const cachedData = await caches.match('manga-data'); // Check for cached data
+const clientId = '931a625118d275b4be444b7f828cfab1'; // Replace with placeholder, don't expose secret
 
-        if (cachedData) {
-            const data = await cachedData.json();
-            updateMangaList(data);
-        } else {
-            const response = await fetch('https://api.mangadex.org/manga/popular?limit=20'); // Fetch data if not cached
-            const data = await response.json();
-            updateMangaList(data);
+const fetchAnime = async () => {
+  try {
+    const headers = new Headers();
+    headers.append('Client-ID', clientId); // Optional header with your client ID
 
-            // Update cache with new data
-            const cache = await caches.open('manga-data');
-            await cache.put('manga-data', new Response(JSON.stringify(data)));
-        }
-    } catch (error) {
-        console.error('Error loading manga data:', error);
-        // Handle potential errors gracefully (e.g., display an error message)
-    }
-}
+    const response = await fetch(`https://api.myanimelist.net/v2/top/anime?limit=20`, { headers });
+    const data = await response.json();
+    const anime = data.data;
+    animeList.innerHTML = ''; // Clear entries only once before populating
 
-function updateMangaList(mangaList) {
-    mangaListContainer.innerHTML = ''; // Clear previous content
-
-    mangaList.forEach(manga => {
-        const mangaItem = document.createElement('div');
-        mangaItem.classList.add('manga-item');
-
-        const mangaImage = document.createElement('img');
-        mangaImage.src = manga.attributes.thumbnail.original;
-
-        const mangaTitle = document.createElement('h3');
-        mangaTitle.textContent = manga.attributes.title;
-
-        mangaItem.appendChild(mangaImage);
-        mangaItem.appendChild(mangaTitle);
-
-        mangaListContainer.appendChild(mangaItem);
+    anime.forEach(anime => {
+      const listItem = document.createElement('li');
+      listItem.innerHTML = `
+        ${anime.rank}. <strong>${anime.title}</strong><br>
+        (Type: ${anime.type}, Score: ${anime.score})
+      `;
+      animeList.appendChild(listItem);
     });
-}
+  } catch (error) {
+    console.error('Error fetching anime data:', error);
+    animeList.innerHTML = '<li>Error fetching data. Please try again later.</li>';
+  }
+};
 
-// Update button event listener (optional, if you have a way to update data)
-updateButton.addEventListener('click', () => {
-    // Implement logic to fetch new data and update local storage
-    console.log('Update button clicked (not implemented in this local version)');
-});
+const fetchManga = async () => {
+  try {
+    const headers = new Headers();
+    headers.append('Client-ID', clientId); // Optional header with your client ID
 
-loadMangaData();
+    const response = await fetch(`https://api.myanimelist.net/v2/top/manga?limit=20`, { headers });
+    const data = await response.json();
+    const manga = data.data;
+    mangaList.innerHTML = ''; // Clear entries only once before populating
+
+    manga.forEach(manga => {
+      const listItem = document.createElement('li');
+      listItem.innerHTML = `
+        ${manga.rank}. <strong>${manga.title}</strong><br>
+        (Type: ${manga.type}, Score: ${manga.score})
+      `;
+      mangaList.appendChild(listItem);
+    });
+  } catch (error) {
+    console.error('Error fetching manga data:', error);
+    mangaList.innerHTML = '<li>Error fetching data. Please try again later.</li>';
+  }
+};
+
+const updateData = async () => {
+  await fetchAnime();
+  await fetchManga();
+};
+
+updateData(); // Fetch data on page load
+
+updateButton.addEventListener('click', updateData);
