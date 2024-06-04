@@ -30,20 +30,20 @@ const updateLists = async () => {
         const infoContainer = document.createElement("div");
         const title = document.createElement("h3");
         const synopsis = document.createElement("p");
-        const type = document.createElement("p");
         const genres = document.createElement("p");
+        const mediaType = document.createElement("p"); // Separate element for media type
 
         image.src = entry.images.jpg.image_url || "placeholder.png"; // Set default image if missing
         image.alt = `${entry.title} image`;
         title.textContent = `${entry.rank}. ${entry.title}`;
         synopsis.textContent = entry.synopsis; // Full synopsis
-        type.textContent = entry.type;
-        genres.textContent =  entry.genres;
+        genres.textContent = `Genres: ${entry.genres.map((genre) => genre.name).join(", ")}`;
+        mediaType.textContent = `Type: ${entry.type}`;
 
         infoContainer.appendChild(title);
         infoContainer.appendChild(synopsis);
         infoContainer.appendChild(genres);
-        infoContainer.appendChild(type);
+        infoContainer.appendChild(mediaType); // Append media type element
         listItem.appendChild(image);
         listItem.appendChild(infoContainer);
 
