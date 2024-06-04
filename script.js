@@ -30,23 +30,22 @@ const updateLists = async () => {
         const infoContainer = document.createElement("div");
         const title = document.createElement("h3");
         const synopsis = document.createElement("p");
-        const genres = document.createElement("p");
+        const genresAndType = document.createElement("p"); // Combined element
 
         image.src = entry.images.jpg.image_url || "placeholder.png"; // Set default image if missing
         image.alt = `${entry.title} image`;
         title.textContent = `${entry.rank}. ${entry.title}`;
-        synopsis.textContent = entry.synopsis; // No truncation
+        synopsis.textContent = entry.synopsis; // Full synopsis
+
+        genresAndType.textContent = `Type: ${entry.type}, Genres: ${entry.genres.map((genre) => genre.name).join(", ")}`;
 
         infoContainer.appendChild(title);
         infoContainer.appendChild(synopsis);
-        infoContainer.appendChild(genres);
+        infoContainer.appendChild(genresAndType);
         listItem.appendChild(image);
         listItem.appendChild(infoContainer);
 
         listElement.appendChild(listItem);
-
-        // Set appropriate styles on synopsis element for wrapping
-        synopsis.style.whiteSpace = "pre-wrap"; // Allow wrapping based on content
       });
     };
 
