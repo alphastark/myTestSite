@@ -1,13 +1,14 @@
 const clientId = "931a625118d275b4be444b7f828cfab1"; // Replace with your actual client ID
 
 const updateLists = async () => {
-  const mangaUrl = `https://api.jikan.moe/v3/top/manga/1/bypopularity?limit=20`;
-  const animeUrl = `https://api.jikan.moe/v3/top/anime/1/bypopularity?limit=20`;
+  const mangaUrl = `https://api.jikan.moe/v4/top/manga?limit=20&sort=bypopularity`; // Optional v4 URL
+  const animeUrl = `https://api.jikan.moe/v4/top/anime?limit=20&sort=bypopularity`; // Optional v4 URL
 
   const [mangaResponse, animeResponse] = await Promise.all([
     fetch(mangaUrl),
     fetch(animeUrl),
   ]);
+
 
   const mangaData = await mangaResponse.json();
   const animeData = await animeResponse.json();
