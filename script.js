@@ -1,4 +1,4 @@
-const clientId = "931a625118d275b4be444b7f828cfab1"; // Replace with your actual MyAnimeList API client ID
+const clientId = "YOUR_CLIENT_ID"; // Replace with your actual MyAnimeList API client ID
 
 const updateLists = async () => {
   const baseUrl = "https://api.jikan.moe/v4/top"; // Base URL for v4 API
@@ -23,17 +23,34 @@ const updateLists = async () => {
     mangaList.innerHTML = "";
     animeList.innerHTML = "";
 
-    mangaData.data.forEach((manga) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${manga.rank}. ${manga.title}`;
-      mangaList.appendChild(listItem);
-    });
+    const processData = (data, listElement) => {
+      data.data.forEach((entry) => {
+        const listItem = document.createElement("li");
+        const image = document.createElement("img");
+        const infoContainer = document.createElement("div");
+        const title = document.createElement("h3");
+        const synopsis = document.createElement("p");
+        const genres = document.createElement("p");
 
-    animeData.data.forEach((anime) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${anime.rank}. ${anime.title}`;
-      animeList.appendChild(listItem);
-    });
+        image.src = entry.images.jpg.image_url || "placeholder.png"; // Set default image if missing
+        image.alt = `${entry.title} image`;
+        title.textContent = `${entry.rank}. ${entry.title}`;
+        synopsis.textContent = `Synopsis: ${entry.synopsis.substring(0, 100)}...`; // Truncate synopsis
+        genres.textContent = `Genres: ${entry.genres.map((genre) => genre.name).join(", ")}`;
+
+        infoContainer.appendChild(title);
+        infoContainer.appendChild(synopsis);
+        infoContainer.appendChild(genres);
+        listItem.appendChild(image);
+        listItem.appendChild(infoContainer);
+
+        listElement.appendChild(listItem);
+      });
+    };
+
+    processData(mangaData, mangaList);
+    processData(animeData, animeList);
+
   } catch (error) {
     console.error("Error fetching data:", error);
     // Optionally display an error message to the user
