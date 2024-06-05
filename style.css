@@ -55,5 +55,20 @@ h2 {
 }
 
 .synopsis {
-    display: none;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: #fff; /* White text color */
+  padding: 10px;
+  text-align: justify; /* Justify text for better readability */
+  opacity: 0; /* Initially transparent */
+  transition: opacity 0.3s ease-in-out; /* Smooth fade-in animation */
+}
+
+.synopsis--visible {
+  opacity: 1; /* Becomes fully opaque when visible */
 }
