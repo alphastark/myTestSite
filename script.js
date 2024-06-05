@@ -9,7 +9,8 @@ async function fetchData(mediaType, page) {
       throw new Error(`Error fetching data: ${response.status}`);
     }
     const data = await response.json();
-    return data.data; // Assuming data is nested under "data" in v4 response
+    // Assuming data is nested under "top" in v4 response (check documentation)
+    return data.top; 
   } catch (error) {
     console.error('Error:', error);
     handleError(mediaType, error); // Delegate error handling with media type information
@@ -42,21 +43,22 @@ async function createTopList(mediaType, container) {
 }
 
 function createEntryElement(data) {
-  const mediaType = data.attributes?.type || 'anime'; // Default to 'anime' if type is missing
+  const mediaType = data.type || 'anime'; // Use "type" property directly (check documentation)
 
   const entryElement = document.createElement('div');
   entryElement.classList.add(mediaType === 'manga' ? 'manga' : 'anime');
 
-  // Access data fields based on potential nesting (check v4 documentation)
-  const imageUrl = data.attributes?.images?.jpg?.image_url || "";
-  const title = data.attributes?.title || "No title available";
-  const synopsis = data.attributes?.synopsis || "No synopsis available";
+  // Access data fields based on Jikan API v4 structure (check documentation)
+  const imageUrl = data.images?.jpg?.image_url || "";
+  const title = data.title || "No title available";
+  const synopsis = data.synopsis || "No synopsis available";
   const truncatedSynopsis = synopsis.substring(0, 150) + "..."; // Truncate synopsis
-  const genres = data.attributes?.genres?.map(genre => genre.name).join(', ') || "No genres available";
+  const genres = data.genres?.map(genre => genre.name).join(', ') || "No genres available";
+  const url = data.url || ""; // Add link to the entry on Jikan
 
   entryElement.innerHTML = `
     <img src="${imageUrl}" alt="${title}">
-    <h3>${title}</h3>
+    <h3><a href="${url}" target="_blank">${title}</a></h3>
     <p class="genres">Genres: ${genres}</p>
     <p class="synopsis">${truncatedSynopsis}</p>
   `;
