@@ -1,8 +1,14 @@
-// Replace with your actual MyAnimeList API key
-const apiKey = 'YOUR_API_KEY';
+// **WARNING: Exposing API key in client-side Javascript is not secure**
+// Replace '931a625118d275b4be444b7f828cfab1' with your actual MyAnimeList API key at your own risk
+
+const clientId = '931a625118d275b4be444b7f828cfab1';
 
 const fetchManga = async () => {
-  const response = await fetch(`https://api.myanimelist.net/v2/top/manga?limit=20`);
+  const response = await fetch(`https://api.myanimelist.net/v2/top/manga?limit=20`, {
+    headers: {
+      'X-MAL-Client-ID': clientId
+    }
+  });
   const data = await response.json();
   const mangaContainer = document.querySelector('.manga-container');
   
@@ -35,7 +41,11 @@ const fetchManga = async () => {
 };
 
 const fetchAnime = async () => {
-  const response = await fetch(`https://api.myanimelist.net/v2/top/anime?limit=20`);
+  const response = await fetch(`https://api.myanimelist.net/v2/top/anime?limit=20`, {
+    headers: {
+      'X-MAL-Client-ID': clientId
+    }
+  });
   const data = await response.json();
   const animeContainer = document.querySelector('.anime-container');
   
