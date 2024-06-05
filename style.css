@@ -1,87 +1,37 @@
 body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 20px;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
 }
 
-header {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
+h1, h2 {
+  text-align: center;
 }
 
-.content-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 40px;
+.manga-container, .anime-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-h2 {
-    margin-bottom: 10px;
+.manga-card, .anime-card {
+  width: 30%;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
 }
 
-.manga, .anime {
-    width: 30%;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
+.manga-card img, .anime-card img {
+  width: 100%;
+  height: auto;
 }
 
-.manga img, .anime img {
-    width: 100%;
-    height: auto;
+.manga-card h3, .anime-card h3 {
+  margin-top: 10px;
 }
 
-.synopsis {
-    font-size: 0.8em;
-    margin-top: 10px;
-}
-
-.genres {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.error-message {
-    color: red;
-    text-align: center;
-    margin-bottom: 10px;
-    display: none; /* Initially hidden */
-}
-
-.loading-container {
-    text-align: center;
-}
-
-#loading-indicator {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-radius: 50%;
-    border-top-color: #3498db; /* Animation customization */
-    animation: spin 1s linear infinite;
-    /* Additional animation styles in @keyframes */
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Additional styling (optional): */
-
-.manga h3, .anime h3 {
-    color: #000;
-}
-
-.genres a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.genres a:hover {
-    text-decoration: underline;
+.manga-card p, .anime-card p {
+  font-size: 0.8em;
+  margin-bottom: 5px;
 }

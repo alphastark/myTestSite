@@ -1,83 +1,75 @@
-const apiBaseUrl = 'https://api.jikan.moe/v4/top'; // Update with actual v4 URL if different
+// Replace with your actual MyAnimeList API key
+const apiKey = 'YOUR_API_KEY';
 
-async function fetchData(mediaType, page = 1) {
-  const url = `${apiBaseUrl}/${mediaType}/${page}/bypopularity`;
+const fetchManga = async () => {
+  const response = await fetch(`https://api.myanimelist.net/v2/top/manga?limit=20`);
+  const data = await response.json();
+  const mangaContainer = document.querySelector('.manga-container');
+  
+  data.data.forEach(manga => {
+    const card = document.createElement('div');
+    card.classList.add('manga-card');
+    
+    const image = document.createElement('img');
+    image.src = manga.images.jpg.image_url;
+    card.appendChild(image);
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.status}`);
-    }
-    const data = await response.json();
-    // Assuming data is nested under "top" in v4 response (check documentation)
-    return data.top;
-  } catch (error) {
-    console.error('Error:', error);
-    handleError(mediaType, error); // Delegate error handling with media type information
-  }
-}
+    const title = document.createElement('h3');
+    title.textContent = manga.title;
+    card.appendChild(title);
 
-function handleError(mediaType, error) {
-  const errorMessageElement = document.getElementById(`${mediaType}-container .error-message`);
-  if (errorMessageElement) {
-    errorMessageElement.textContent = `An error occurred fetching ${mediaType} data. Please try again later.`;
-    errorMessageElement.style.display = 'block'; // Show the error message
-  } else {
-    console.warn("Error message element not found for", mediaType);
-  }
-}
+    const synopsis = document.createElement('p');
+    synopsis.textContent = manga.synopsis;
+    card.appendChild(synopsis);
 
-async function createTopList(mediaType, container) {
-  const loadingContainer = container.querySelector('.loading-container');
-  showLoadingIndicator(loadingContainer); // Show loading indicator efficiently
+    const genres = document.createElement('p');
+    genres.textContent = `Genres: ${manga.genres.map(genre => genre.name).join(', ')}`;
+    card.appendChild(genres);
 
-  try {
-    const topData = await fetchData(mediaType);
-    const limitedData = topData.slice(0, 20); // Get only top 20 entries
+    const type = document.createElement('p');
+    type.textContent = `Type: ${manga.type}`;
+    card.appendChild(type);
 
-    limitedData.forEach(entry => container.appendChild(createEntryElement(entry)));
-  } catch (error) {
-    // Error handling already handled in fetchData
-  } finally {
-    hideLoadingIndicator(loadingContainer); // Hide loading indicator regardless of success or error
-  }
-}
+    mangaContainer.appendChild(card);
+  });
+};
 
-function createEntryElement(data) {
-  const mediaType = data.type || 'anime'; // Use "type" property directly (check documentation)
+const fetchAnime = async () => {
+  const response = await fetch(`https://api.myanimelist.net/v2/top/anime?limit=20`);
+  const data = await response.json();
+  const animeContainer = document.querySelector('.anime-container');
+  
+  data.data.forEach(anime => {
+    const card = document.createElement('div');
+    card.classList.add('anime-card');
+    
+    const image = document.createElement('img');
+    image.src = anime.images.jpg.image_url;
+    card.appendChild(image);
 
-  const entryElement = document.createElement('div');
-  entryElement.classList.add(mediaType === 'manga' ? 'manga' : 'anime');
+    const title = document.createElement('h3');
+    title.textContent = anime.title;
+    card.appendChild(title);
 
-  // Access data fields based on Jikan API v4 structure (check documentation)
-  const imageUrl = data.images?.jpg?.image_url || "";
-  const title = data.title || "No title available";
-  const synopsis = data.synopsis || "No synopsis available";
-  const truncatedSynopsis = synopsis.substring(0, 150) + "..."; // Truncate synopsis
-  const genres = data.genres?.map(genre => genre.name).join(', ') || "No genres available";
-  const url = data.url || ""; // Add link to the entry on Jikan
+    const synopsis = document.createElement('p');
+    // Limit synopsis length to avoid overwhelming the page
+    synopsis.textContent = anime.synopsis.slice(0, 200) + "..."; 
+    card.appendChild(synopsis);
 
-  entryElement.innerHTML = `
-    <img src="${imageUrl}" alt="${title}">
-    <h3><a href="${url}" target="_blank">${title}</a></h3>
-    <p class="genres">Genres: ${genres}</p>
-    <p class="synopsis">${truncatedSynopsis}</p>
-  `;
+    const genres = document.createElement('p');
+    genres.textContent = `Genres: ${anime.genres.map(genre => genre.name).join(', ')}`;
+    card.appendChild(genres);
 
-  return entryElement;
-}
+    const type = document.createElement('p');
+    type.textContent = `Type: ${anime.type}`;
+    card.appendChild(type);
 
-function showLoadingIndicator(container) {
-  container.querySelector('#loading-indicator').style.display = 'block';
-}
+    animeContainer.appendChild(card);
+  });
+};
 
-function hideLoadingIndicator(container) {
-  container.querySelector('#loading-indicator').style.display = 'none';
-}
-
-// Media types to fetch
-const mediaTypes = ['manga', 'anime'];
-
-window.addEventListener('DOMContentLoaded', () => {
-  mediaTypes.forEach(mediaType => createTopList(mediaType, document.getElementById(mediaType + '-container')));
+// Call the functions to fetch and display data on page load
+window.addEventListener('DOMContentLoaded', async () => {
+  await fetchManga();
+  await fetchAnime();
 });
