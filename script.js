@@ -1,7 +1,7 @@
 const apiBaseUrl = 'https://api.jikan.moe/v4/top'; // Update with actual v4 URL if different
 
-async function fetchData(mediaType) {
-  const url = `${apiBaseUrl}/${mediaType}/1/bypopularity`; // Fetch only page 1 for top 20
+async function fetchData(mediaType, page = 1) {
+  const url = `${apiBaseUrl}/${mediaType}/${page}/bypopularity`;
 
   try {
     const response = await fetch(url);
@@ -9,7 +9,8 @@ async function fetchData(mediaType) {
       throw new Error(`Error fetching data: ${response.status}`);
     }
     const data = await response.json();
-    return data.top.slice(0, 20); // Extract only top 20 entries directly
+    // Assuming data is nested under "top" in v4 response (check documentation)
+    return data.top;
   } catch (error) {
     console.error('Error:', error);
     handleError(mediaType, error); // Delegate error handling with media type information
@@ -32,7 +33,9 @@ async function createTopList(mediaType, container) {
 
   try {
     const topData = await fetchData(mediaType);
-    topData.forEach(entry => container.appendChild(createEntryElement(entry)));
+    const limitedData = topData.slice(0, 20); // Get only top 20 entries
+
+    limitedData.forEach(entry => container.appendChild(createEntryElement(entry)));
   } catch (error) {
     // Error handling already handled in fetchData
   } finally {
@@ -43,7 +46,6 @@ async function createTopList(mediaType, container) {
 function createEntryElement(data) {
   const mediaType = data.type || 'anime'; // Use "type" property directly (check documentation)
 
-  const fragment = document.createDocumentFragment(); // Improve performance with fragment
   const entryElement = document.createElement('div');
   entryElement.classList.add(mediaType === 'manga' ? 'manga' : 'anime');
 
@@ -55,14 +57,13 @@ function createEntryElement(data) {
   const genres = data.genres?.map(genre => genre.name).join(', ') || "No genres available";
   const url = data.url || ""; // Add link to the entry on Jikan
 
-  fragment.innerHTML = `
+  entryElement.innerHTML = `
     <img src="${imageUrl}" alt="${title}">
     <h3><a href="${url}" target="_blank">${title}</a></h3>
     <p class="genres">Genres: ${genres}</p>
     <p class="synopsis">${truncatedSynopsis}</p>
   `;
 
-  entryElement.appendChild(fragment); // Append fragment for efficiency
   return entryElement;
 }
 
