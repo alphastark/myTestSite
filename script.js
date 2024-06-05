@@ -1,5 +1,5 @@
 const baseUrl = 'https://api.jikan.moe/v4/top'; // Update with actual v4 URL if different
-const mediaTypes = ['anime', 'manga'];
+const mediaTypes = ['manga', 'anime'];
 
 async function fetchTopData(mediaType, page) {
   const url = `${baseUrl}/${mediaType}/${page}/bypopularity`;
@@ -12,7 +12,7 @@ async function fetchTopData(mediaType, page) {
     return data.data; // Assuming data is nested under "data" in v4 response
   } catch (error) {
     console.error('Error:', error);
-    // Handle error, display message to user if needed
+    // Handle error, display user-friendly message (e.g., "An error occurred. Please try again later.")
   }
 }
 
@@ -23,20 +23,21 @@ async function createTopList(mediaType, container) {
 }
 
 function createEntry(data, container) {
-  const mediaType = data.type || 'anime'; // Default to 'anime' if type is missing
+  const mediaType = data.attributes?.type || 'anime'; // Default to 'anime' if type is missing
   const entryElement = document.createElement('div');
   entryElement.classList.add(mediaType === 'manga' ? 'manga' : 'anime');
-  
-  // Access data fields based on updated structure (check v4 documentation)
-  let imageUrl = data.attributes?.images?.jpg?.image_url || ""; // Example: assuming nested structure
-  let title = data.attributes?.title || "No title available";
-  // ... access other fields based on v4 data structure (genres, synopsis)
 
-  let synopsis = synopsis ? synopsis.substring(0, 150) + "..." : "No synopsis available.";
+  // Access data fields based on potential nesting (check v4 documentation)
+  let imageUrl = data.attributes?.images?.jpg?.image_url || "";
+  let title = data.attributes?.title || "No title available";
+  let synopsis = data.attributes?.synopsis || "No synopsis available";
+  synopsis = synopsis.substring(0, 150) + "..."; // Truncate synopsis
+  let genres = data.attributes?.genres?.map(genre => genre.name).join(', ') || "No genres available";
+
   entryElement.innerHTML = `
     <img src="${imageUrl}" alt="${title}">
     <h3>${title}</h3>
-    <p class="genres">Genres: ${data.attributes?.genres?.map(genre => genre.name).join(', ')}</p>
+    <p class="genres">Genres: ${genres}</p>
     <p class="synopsis">${synopsis}</p>
   `;
   container.appendChild(entryElement);
