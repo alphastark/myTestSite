@@ -16,18 +16,18 @@ async function fetchData(mediaType, page) {
     return data.data; // Assuming data is nested under "data" in v4 response
   } catch (error) {
     console.error('Error:', error);
-    handleError(error); // Delegate error handling to a separate function
+    handleError(mediaType, error); // Delegate error handling with media type information
   }
 }
 
-// Function to handle errors
-function handleError(error) {
-  const errorMessageElement = document.getElementById('error-message'); // Assuming you have an element with this ID
+// Function to handle errors and display messages
+function handleError(mediaType, error) {
+  const errorMessageElement = document.getElementById(`${mediaType}-container .error-message`);
   if (errorMessageElement) {
     errorMessageElement.textContent = "An error occurred. Please try again later.";
     errorMessageElement.style.display = 'block'; // Show the error message
   } else {
-    console.warn("No error message element found. Consider adding one for better user experience.");
+    console.warn("Error message element not found for", mediaType);
   }
 }
 
@@ -57,22 +57,28 @@ function createEntryElement(data) {
 
 // Function to create the top list for a specific media type
 async function createTopList(mediaType, container) {
-  const topData = await fetchData(mediaType, 1);
-  const limitedData = topData.slice(0, 20); // Get only top 20
-  limitedData.forEach(entry => container.appendChild(createEntryElement(entry)));
-}
+  const loadingContainer = container.querySelector('.loading-container');
+  showLoadingIndicator(loadingContainer); // Show loading indicator efficiently
 
-// Call the function for both media types with loading indicator
-
-const loadingIndicator = document.getElementById('loading-indicator');
-
-async function fetchAndDisplayData(mediaType, container) {
-  loadingIndicator.style.display = 'block'; // Show loading indicator
   try {
-    await createTopList(mediaType, container);
+    const topData = await fetchData(mediaType, 1);
+    const limitedData = topData.slice(0, 20); // Get only top 20
+    limitedData.forEach(entry => container.appendChild(createEntryElement(entry)));
+  } catch (error) {
+    // Error handling already handled in fetchData
   } finally {
-    loadingIndicator.style.display = 'none'; // Hide loading indicator regardless of success or error
+    hideLoadingIndicator(loadingContainer); // Hide loading indicator regardless of success or error
   }
 }
 
-mediaTypes.forEach(mediaType => fetchAndDisplayData(mediaType, document.getElementById(mediaType + '-container')));
+// Function to show/hide loading indicator
+function showLoadingIndicator(container) {
+  container.querySelector('#loading-indicator').style.display = 'block';
+}
+
+function hideLoadingIndicator(container) {
+  container.querySelector('#loading-indicator').style.display = 'none';
+}
+
+// Call the function for both media types
+mediaTypes.forEach(mediaType => createTopList(mediaType, document.getElementById(mediaType + '-container')));
