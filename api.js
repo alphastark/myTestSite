@@ -1,5 +1,6 @@
+const apiBaseUrl = 'https://api.jikan.moe/v4/top'; // Update with actual v4 URL if different
+
 async function fetchData(mediaType, page) {
-  const apiBaseUrl = 'https://api.jikan.moe/v4/top'; // Update with actual v4 URL if different
   const url = `${apiBaseUrl}/${mediaType}/${page}/bypopularity`;
 
   try {
@@ -71,10 +72,4 @@ function hideLoadingIndicator(container) {
   container.querySelector('#loading-indicator').style.display = 'none';
 }
 
-export { initTopList };  // Export the initialization function
-
-// Initialization function (optional - for potential customization)
-function initTopList(mediaType) {
-  const container = document.getElementById(`${mediaType}-container`);
-  createTopList(mediaType, container);
-}
+export { createTopList }; // Export the function for use in index.js
