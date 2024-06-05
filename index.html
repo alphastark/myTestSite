@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyAnimeList Top Lists</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyAnimeList Top 20</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
     <h1>MyAnimeList Top 20</h1>
-  </header>
-  <main>
-    <div class="tabs">
-      <button class="tab active" data-tab="manga">Top Manga</button>
-      <button class="tab" data-tab="anime">Top Anime</button>
+    <div class="container">
+        <div class="manga-section">
+            <h2>Top 20 Manga</h2>
+            <ul id="manga-list"></ul>
+        </div>
+        <div class="anime-section">
+            <h2>Top 20 Anime</h2>
+            <ul id="anime-list"></ul>
+        </div>
     </div>
-    <div class="content-container">
-      <section id="top-manga">
-        <h2>Top Manga</h2>
-        <ul></ul>
-      </section>
-      <section id="top-anime" style="display: none;"> <h2>Top Anime</h2>
-        <ul></ul>
-      </section>
-    </div>
-  </main>
-  <button id="update-button">Update Lists</button>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

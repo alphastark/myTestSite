@@ -1,80 +1,38 @@
-const clientId = "YOUR_CLIENT_ID"; // Replace with your actual MyAnimeList API client ID
-const tabs = document.querySelectorAll('.tab');
-const contentSections = document.querySelectorAll('.content-container section');
+const mangaList = document.getElementById('manga-list');
+const animeList = document.getElementById('anime-list');
 
+fetch('https://api.jikan.moe/v3/top/manga/1/bypopularity')
+    .then(response => response.json())
+    .then(data => {
+        const topManga = data.top.slice(0, 20); // Get top 20 entries
+        topManga.forEach(manga => {
+            const mangaItem = document.createElement('li');
+            mangaItem.classList.add('manga-item');
+            mangaItem.innerHTML = `
+                <img src="${manga.image_url}" alt="${manga.title}">
+                <h3>${manga.title}</h3>
+                <p class="synopsis">${manga.synopsis}</p>
+                <p class="genres">Genres: ${manga.genres.map(genre => genre.name).join(', ')}</p>
+                <p>Media Type: Manga</p>
+            `;
+            mangaList.appendChild(mangaItem);
+        });
+    });
 
-const updateLists = async () => {
-  const baseUrl = "https://api.jikan.moe/v4/top"; // Base URL for v4 API
-  const limit = 20; // Number of entries to fetch
-
-  try {
-    const [mangaResponse, animeResponse] = await Promise.all([
-      fetch(`${baseUrl}/manga?limit=${limit}&sort=bypopularity`),
-      fetch(`${baseUrl}/anime?limit=${limit}&sort=bypopularity`),
-    ]);
-
-    if (!mangaResponse.ok || !animeResponse.ok) {
-      throw new Error("Failed to fetch data from MyAnimeList API");
-    }
-
-    const mangaData = await mangaResponse.json();
-    const animeData = await animeResponse.json();
-
-    const mangaList = document.getElementById("top-manga");
-    const animeList = document.getElementById("top-anime");
-
-    mangaList.innerHTML = "";
-    animeList.innerHTML = "";
-
-    const processData = (data, listElement) => {
-      data.data.forEach((entry) => {
-        const listItem = document.createElement("li");
-        const image = document.createElement("img");
-        const infoContainer = document.createElement("div");
-        const title = document.createElement("h3");
-        const synopsis = document.createElement("p");
-        const genres = document.createElement("p");
-        const mediaType = document.createElement("p"); // Separate element for media type
-
-        image.src = entry.images.jpg.image_url || "placeholder.png"; // Set default image if missing
-        image.alt = `${entry.title} image`;
-        title.textContent = `${entry.rank}. ${entry.title}`;
-        synopsis.textContent = entry.synopsis; // Full synopsis
-        genres.textContent = `Genres: ${entry.genres.map((genre) => genre.name).join(", ")}`;
-        mediaType.textContent = `Type: ${entry.type}`;
-
-        infoContainer.appendChild(title);
-        infoContainer.appendChild(synopsis);
-        infoContainer.appendChild(genres);
-        infoContainer.appendChild(mediaType); // Append media type element
-        listItem.appendChild(image);
-        listItem.appendChild(infoContainer);
-
-        listElement.appendChild(listItem);
-      });
-    };
-
-    processData(mangaData, mangaList);
-    processData(animeData, animeList);
-
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    // Optionally display an error message to the user
-  }
-};
-
-const updateButton = document.getElementById("update-button");
-
-updateButton.addEventListener("click", updateLists);
-
-updateLists(); // Initial fetch on page load
-
-tabs.forEach(tab => tab.addEventListener('click', (e) => {
-  const targetSection = document.getElementById(e.target.dataset.tab);
-  
-  tabs.forEach(tab => tab.classList.remove('active'));
-  e.target.classList.add('active');
-  
-  contentSections.forEach(section => section.style.display = 'none');
-  targetSection.style.display = 'block';
-}));
+fetch('https://api.jikan.moe/v3/top/anime/1/bypopularity')
+    .then(response => response.json())
+    .then(data => {
+        const topAnime = data.top.slice(0, 20); // Get top 20 entries
+        topAnime.forEach(anime => {
+            const animeItem = document.createElement('li');
+            animeItem.classList.add('anime-item');
+            animeItem.innerHTML = `
+                <img src="${anime.image_url}" alt="${anime.title}">
+                <h3>${anime.title}</h3>
+                <p class="synopsis">${anime.synopsis}</p>
+                <p class="genres">Genres: ${anime.genres.map(genre => genre.name).join(', ')}</p>
+                <p>Media Type: Anime</p>
+            `;
+            animeList.appendChild(animeItem);
+        });
+    });
