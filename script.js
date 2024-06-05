@@ -27,9 +27,12 @@ const fetchTopList = async (type, targetList) => {
       const synopsis = listItem.querySelector(".synopsis");
       const showSynopsisBtn = listItem.querySelector("button");
 
+      let isSynopsisVisible = false; // Track the initial visibility state
+
       showSynopsisBtn.addEventListener("click", () => {
         synopsis.classList.toggle("synopsis--visible");
-        showSynopsisBtn.textContent = synopsis.classList.contains("synopsis--visible") ? "Hide Synopsis" : "Show Synopsis";
+        isSynopsisVisible = !isSynopsisVisible; // Update the visibility flag
+        showSynopsisBtn.textContent = isSynopsisVisible ? "Hide Synopsis" : "Show Synopsis";
       });
 
       targetList.appendChild(listItem);
