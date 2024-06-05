@@ -1,4 +1,7 @@
 const clientId = "YOUR_CLIENT_ID"; // Replace with your actual MyAnimeList API client ID
+const tabs = document.querySelectorAll('.tab');
+const contentSections = document.querySelectorAll('.content-container section');
+
 
 const updateLists = async () => {
   const baseUrl = "https://api.jikan.moe/v4/top"; // Base URL for v4 API
@@ -65,3 +68,13 @@ const updateButton = document.getElementById("update-button");
 updateButton.addEventListener("click", updateLists);
 
 updateLists(); // Initial fetch on page load
+
+tabs.forEach(tab => tab.addEventListener('click', (e) => {
+  const targetSection = document.getElementById(e.target.dataset.tab);
+  
+  tabs.forEach(tab => tab.classList.remove('active'));
+  e.target.classList.add('active');
+  
+  contentSections.forEach(section => section.style.display = 'none');
+  targetSection.style.display = 'block';
+}));

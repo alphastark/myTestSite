@@ -2,118 +2,71 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
-  background: linear-gradient(#e0e0e0, #f5f5f5);
-  /* Removed min-height and vertical centering styles */
-  display: flex; /* Center content horizontally */
-  justify-content: center; /* Align to center */
+  background-color: #f5f5f5;
 }
 
 h1 {
   text-align: center;
   color: #222;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
-header {
-  padding: 20px 0;
-  border-bottom: 1px solid #ddd;
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-main {
-  width: 80%; /* Adjust width as needed */
+.tab {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
-section {
-  width: 45%; /* Equal width for both sections */
-  display: inline-block; /* Display sections side-by-side */
+.tab.active {
+  background-color: #e0e0e0;
+  border-bottom: 1px solid #ccc;
+}
+
+.content-container {
+  background-color: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  margin: 0 10px; /* Add margin for spacing */
-  vertical-align: top; /* Ensure sections align at the top */
 }
 
-#top-sections {
-  /* Removed display: flex; as centering is done on body element */
+section {
+  margin-bottom: 20px;
 }
 
-/* Ensure section headings are visible */
 section h2 {
-  margin-top: 0; /* Remove potential margin */
-  padding-bottom: 10px; /* Add space below heading */
-  border-bottom: 1px solid #ddd; /* Add subtle border */
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
 }
 
 ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  padding: 10px;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer; /* Indicate clickable list items */
-}
-
-li:hover {
-  background-color: #f0f0f0;
-}
-
-li img {
-  width: 80px;
-  height: auto;
-  margin-right: 20px;
-  border-radius: 5px;
-}
-
-li h3 {
-  font-size: 18px;
   margin-bottom: 5px;
 }
 
-li p {
-  font-size: 14px;
-  margin-bottom: 0;
-  line-height: 1.5; /* Adjust line height for better readability */
-}
-
-#search-bar {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
+#update-button {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
   border-radius: 5px;
-  margin-right: 10px;
-  float: right;
+  cursor: pointer;
+  margin-top: 20px;
 }
-
-/* Star rating example (replace with your implementation) */
-.star-rating {
-  display: inline-block;
-  width: 60px;
-}
-
-.star-rating:before {
-  content: '★★★★★';
-  color: #ccc;
-  font-size: 12px;
-}
-
-.star-rating span {
-  position: absolute;
-  width: 60px;
-  display: block;
-  overflow: hidden;
-}
-
-.star-rating span:after {
-  content: '★★★★★';
-  color: gold;
-  font-size: 12px;
-  position: absolute;
-}
-
-/* Adjust

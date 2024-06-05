@@ -10,19 +10,21 @@
 <body>
   <header>
     <h1>MyAnimeList Top 20</h1>
-    <input type="text" id="search-bar" placeholder="Search Titles">
   </header>
   <main>
-    <section id="top-sections">
-      <div id="top-manga">
+    <div class="tabs">
+      <button class="tab active" data-tab="manga">Top Manga</button>
+      <button class="tab" data-tab="anime">Top Anime</button>
+    </div>
+    <div class="content-container">
+      <section id="top-manga">
         <h2>Top Manga</h2>
         <ul></ul>
-      </div>
-      <div id="top-anime">
-        <h2>Top Anime</h2>
+      </section>
+      <section id="top-anime" style="display: none;"> <h2>Top Anime</h2>
         <ul></ul>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
   <button id="update-button">Update Lists</button>
   <script src="script.js"></script>
