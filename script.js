@@ -1,44 +1,41 @@
 const mangaContainer = document.querySelector('.manga-container');
 const animeContainer = document.querySelector('.anime-container');
 
-fetch('https://api.jikan.moe/v3/top/manga/1/bypopularity')
-  .then(response => response.json())
-  .then(data => {
-    const topManga = data.top.slice(0, 20); // Get only top 20
-    topManga.forEach(manga => createMangaEntry(manga));
-  });
+const baseUrl = 'https://api.jikan.moe/v3/top/anime'; // Base URL for both requests
 
-fetch('https://api.jikan.moe/v3/top/anime/1/bypopularity')
-  .then(response => response.json())
-  .then(data => {
-    const topAnime = data.top.slice(0, 20); // Get only top 20
-    topAnime.forEach(anime => createAnimeEntry(anime));
-  });
-
-function createMangaEntry(manga) {
-  const mangaEntry = document.createElement('div');
-  mangaEntry.classList.add('manga');
-  // Check if synopsis is available and truncate if too long
-  let synopsis = manga.synopsis ? manga.synopsis.substring(0, 150) + "..." : "No synopsis available.";
-  mangaEntry.innerHTML = `
-    <img src="${manga.image_url}" alt="${manga.title}">
-    <h3>${manga.title}</h3>
-    <p class="genres">Genres: ${manga.genres.map(genre => genre.name).join(', ')}</p>
-    <p class="synopsis">${synopsis}</p>
-  `;
-  mangaContainer.appendChild(mangaEntry);
+async function fetchTopData(type, page) {
+  const url = `${baseUrl}/${page}/bypopularity`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.top;
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle error, display message to user if needed
+  }
 }
 
-function createAnimeEntry(anime) {
-  const animeEntry = document.createElement('div');
-  animeEntry.classList.add('anime');
-  // Check if synopsis is available and truncate if too long
-  let synopsis = anime.synopsis ? anime.synopsis.substring(0, 150) + "..." : "No synopsis available.";
-  animeEntry.innerHTML = `
-    <img src="${anime.image_url}" alt="${anime.title}">
-    <h3>${anime.title}</h3>
-    <p class="genres">Genres: ${anime.genres.map(genre => genre.name).join(', ')}</p>
+async function createTopList(mediaType, container) {
+  const topData = await fetchTopData(mediaType, 1);
+  const limitedData = topData.slice(0, 20); // Get only top 20
+  limitedData.forEach(entry => createEntry(entry, container));
+}
+
+function createEntry(data, container) {
+  const entryElement = document.createElement('div');
+  entryElement.classList.add(data.type === 'manga' ? 'manga' : 'anime');
+  let synopsis = data.synopsis ? data.synopsis.substring(0, 150) + "..." : "No synopsis available.";
+  entryElement.innerHTML = `
+    <img src="${data.image_url}" alt="${data.title}">
+    <h3>${data.title}</h3>
+    <p class="genres">Genres: ${data.genres.map(genre => genre.name).join(', ')}</p>
     <p class="synopsis">${synopsis}</p>
   `;
-  animeContainer.appendChild(animeEntry);
+  container.appendChild(entryElement);
 }
+
+createTopList('manga', mangaContainer);
+createTopList('anime', animeContainer);
