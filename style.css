@@ -1,37 +1,59 @@
 body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 20px;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-h1, h2 {
-  text-align: center;
+header {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
 }
 
-.manga-container, .anime-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+h1 {
+    font-size: 2em;
 }
 
-.manga-card, .anime-card {
-  width: 30%;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
 }
 
-.manga-card img, .anime-card img {
-  width: 100%;
-  height: auto;
+.content-wrapper {
+    width: 45%;
+    margin-bottom: 20px;
 }
 
-.manga-card h3, .anime-card h3 {
-  margin-top: 10px;
+h2 {
+    margin-bottom: 10px;
 }
 
-.manga-card p, .anime-card p {
-  font-size: 0.8em;
-  margin-bottom: 5px;
+.manga-list, .anime-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.manga-item, .anime-item {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.manga-item img, .anime-item img {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.manga-item h3, .anime-item h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.synopsis {
+    display: none;
 }

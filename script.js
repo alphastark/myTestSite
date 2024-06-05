@@ -1,85 +1,33 @@
-// **WARNING: Exposing API key in client-side Javascript is not secure**
-// Replace '931a625118d275b4be444b7f828cfab1' with your actual MyAnimeList API key at your own risk
+const mangaList = document.getElementById("manga-list");
+const animeList = document.getElementById("anime-list");
 
-const clientId = '931a625118d275b4be444b7f828cfab1';
-
-const fetchManga = async () => {
-  const response = await fetch(`https://api.myanimelist.net/v2/top/manga?limit=20`, {
-    headers: {
-      'X-MAL-Client-ID': clientId
-    }
-  });
+const fetchTopList = async (type, targetList) => {
+  const response = await fetch(`https://api.jikan.moe/v4/top/${type}/1/bypopularity`);
   const data = await response.json();
-  const mangaContainer = document.querySelector('.manga-container');
   
-  data.data.forEach(manga => {
-    const card = document.createElement('div');
-    card.classList.add('manga-card');
-    
-    const image = document.createElement('img');
-    image.src = manga.images.jpg.image_url;
-    card.appendChild(image);
+  data.data.forEach((item) => {
+    const listItem = document.createElement("div");
+    listItem.classList.add(`${type}-item`);
 
-    const title = document.createElement('h3');
-    title.textContent = manga.title;
-    card.appendChild(title);
+    listItem.innerHTML = `
+      <img src="<span class="math-inline">\{item\.images\.jpg\.image\_url\}" alt\="</span>{item.title}">
+      <h3><span class="math-inline">\{item\.title\}</h3\>
+<p class\="synopsis"\></span>{item.synopsis}</p>
+      <div>
+        <b>Genres:</b> ${item.genres.map(genre => genre.name).join(", ")}<br>
+        <b>Type:</b> ${item.type}
+      </div>
+      <button>Show Synopsis</button>
+    `;
 
-    const synopsis = document.createElement('p');
-    synopsis.textContent = manga.synopsis;
-    card.appendChild(synopsis);
+    const synopsis = listItem.querySelector(".synopsis");
+    const showSynopsisBtn = listItem.querySelector("button");
 
-    const genres = document.createElement('p');
-    genres.textContent = `Genres: ${manga.genres.map(genre => genre.name).join(', ')}`;
-    card.appendChild(genres);
+    showSynopsisBtn.addEventListener("click", () => {
+      synopsis.classList.toggle("synopsis--visible");
+      showSynopsisBtn.textContent = synopsis.classList.contains("synopsis--visible") ? "Hide Synopsis" : "Show Synopsis";
+    });
 
-    const type = document.createElement('p');
-    type.textContent = `Type: ${manga.type}`;
-    card.appendChild(type);
-
-    mangaContainer.appendChild(card);
+    targetList.appendChild(listItem);
   });
 };
-
-const fetchAnime = async () => {
-  const response = await fetch(`https://api.myanimelist.net/v2/top/anime?limit=20`, {
-    headers: {
-      'X-MAL-Client-ID': clientId
-    }
-  });
-  const data = await response.json();
-  const animeContainer = document.querySelector('.anime-container');
-  
-  data.data.forEach(anime => {
-    const card = document.createElement('div');
-    card.classList.add('anime-card');
-    
-    const image = document.createElement('img');
-    image.src = anime.images.jpg.image_url;
-    card.appendChild(image);
-
-    const title = document.createElement('h3');
-    title.textContent = anime.title;
-    card.appendChild(title);
-
-    const synopsis = document.createElement('p');
-    // Limit synopsis length to avoid overwhelming the page
-    synopsis.textContent = anime.synopsis.slice(0, 200) + "..."; 
-    card.appendChild(synopsis);
-
-    const genres = document.createElement('p');
-    genres.textContent = `Genres: ${anime.genres.map(genre => genre.name).join(', ')}`;
-    card.appendChild(genres);
-
-    const type = document.createElement('p');
-    type.textContent = `Type: ${anime.type}`;
-    card.appendChild(type);
-
-    animeContainer.appendChild(card);
-  });
-};
-
-// Call the functions to fetch and display data on page load
-window.addEventListener('DOMContentLoaded', async () => {
-  await fetchManga();
-  await fetchAnime();
-});
