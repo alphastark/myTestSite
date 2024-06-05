@@ -26,7 +26,7 @@ function handleError(mediaType, error) {
   }
 }
 
-function createTopList(mediaType, container) {
+async function createTopList(mediaType, container) {
   const loadingContainer = container.querySelector('.loading-container');
   showLoadingIndicator(loadingContainer); // Show loading indicator efficiently
 
