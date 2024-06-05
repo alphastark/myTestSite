@@ -1,4 +1,4 @@
-import { initTopList } from './api'; // Import the initialization function
+import { initTopList } from './api.js'; // Import the initialization function
 
 // Media types to fetch
 const mediaTypes = ['manga', 'anime'];
