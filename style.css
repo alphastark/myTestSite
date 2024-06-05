@@ -3,10 +3,9 @@ body {
   margin: 0;
   padding: 20px;
   background: linear-gradient(#e0e0e0, #f5f5f5);
+  /* Removed min-height and vertical centering styles */
   display: flex; /* Center content horizontally */
   justify-content: center; /* Align to center */
-  align-items: center; /* Align vertically (optional) */
-  min-height: 100vh; /* Set minimum viewport height for full-page centering */
 }
 
 h1 {
