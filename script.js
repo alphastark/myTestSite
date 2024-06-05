@@ -3,7 +3,7 @@ const animeList = document.getElementById("anime-list");
 
 const fetchTopList = async (type, targetList) => {
   try {
-    const response = await fetch(`https://api.jikan.moe/v4/top/${type}/1/bypopularity`);
+    const response = await fetch(`https://api.jikan.moe/v4/top/${type}?filter=bypopularity`);
     if (!response.ok) {
       throw new Error(`Failed to fetch data for ${type}`);
     }
