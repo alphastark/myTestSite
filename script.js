@@ -15,14 +15,20 @@ const fetchTopList = async (type, targetList) => {
 
       listItem.innerHTML = `
         <figure class="item-cover">
-          <img src="${item.images.jpg.image_url}" alt="${item.title}"> <!-- Display the the cover art for this item -->
-          <div class="synopsis">${item.synopsis}</div> <!-- Show the synopsis for this item -->
+          <!-- Display the the cover art for this item -->
+          <img src="${item.images.jpg.image_url}" alt="${item.title}">
+          <!-- Show the synopsis for this item -->
+          <div class="synopsis">${item.synopsis}</div>
         </figure>
         <div>
-          <h2><a href="${item.url}">${item.title}</a></h2> <!-- Show the title of this item -->
-          <h3>Alternate titles:</h2> ${item.titles.map(alttitles => alttitles.title).join("<br>")}<br> <!-- List all the alternate titles on new lines -->
-          <b>Genres:</b> ${item.genres.map(genre => genre.name).join(", ")}<br> <!-- List the genres for this item -->
-          <b>Type:</b> ${item.type} <!-- List the type of media (manga, manhwa, tv, movie, ova, etc.) -->
+          <!-- Show the title of this item -->
+          <h2><a href="${item.url}">${item.title}</a></h2>
+          <!-- List all the alternate titles on new lines -->
+          <h3>Alternate titles:</h2> ${item.titles.map(alttitles => alttitles.title).join("<br>")}<br>
+          <!-- List the genres for this item -->
+          <b>Genres:</b> ${item.genres.map(genre => genre.name).join(", ")}<br>
+          <!-- List the type of media (manga, manhwa, tv, movie, ova, etc.) -->
+          <b>Type:</b> ${item.type}
         </div>
         <button class="showSynopsis" role="button">Show Synopsis</button>
       `;
