@@ -14,10 +14,13 @@ const fetchTopList = async (type, targetList) => {
       listItem.classList.add(`${type}-item`);
 
       listItem.innerHTML = `
-        <img src="${item.images.jpg.image_url}" alt="${item.title}">
-        <h3>${item.title}</h3>
-        <p class="synopsis">${item.synopsis}</p>
+        <figure class="item-cover">
+          <img src="${item.images.jpg.image_url}" alt="${item.title}">
+          <div class="synopsis">${item.synopsis}</div>
+        </figure>
         <div>
+          <h2><a href="${item.url}">${item.title}</a></h2>
+          <h3>Alternate titles:</h2> ${item.titles.map(alttitles => alttitles.title).join("<br>")}<br>
           <b>Genres:</b> ${item.genres.map(genre => genre.name).join(", ")}<br>
           <b>Type:</b> ${item.type}
         </div>
@@ -26,13 +29,23 @@ const fetchTopList = async (type, targetList) => {
 
       const synopsis = listItem.querySelector(".synopsis");
       const showSynopsisBtn = listItem.querySelector("button");
+      const image = listItem.querySelector("img");
 
       let isSynopsisVisible = false; // Track the initial visibility state
 
       showSynopsisBtn.addEventListener("click", () => {
         synopsis.classList.toggle("synopsis--visible");
-        isSynopsisVisible = !isSynopsisVisible; // Update the visibility flag
+        isSynopsisVisible = !isSynopsisVisible;
         showSynopsisBtn.textContent = isSynopsisVisible ? "Hide Synopsis" : "Show Synopsis";
+      });
+
+      // Optional: Close synopsis on image click
+      image.addEventListener("click", () => {
+        if (isSynopsisVisible) {
+          synopsis.classList.remove("synopsis--visible");
+          isSynopsisVisible = false;
+          showSynopsisBtn.textContent = "Show Synopsis";
+        }
       });
 
       targetList.appendChild(listItem);
