@@ -11,7 +11,7 @@ header {
     background-image: url("/myTestSite/images/banner_1.png");
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: center;
+    background-position-x: center;
     padding: 20px;
     text-align: center;
 }
