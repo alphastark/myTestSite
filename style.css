@@ -8,6 +8,7 @@ body {
 
 header {
     background-color: #f1f1f1;
+    background-image: url("/myTestSite/images/banner_1.png");
     padding: 20px;
     text-align: center;
 }
