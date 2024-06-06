@@ -24,7 +24,7 @@ const fetchTopList = async (type, targetList) => {
           <b>Genres:</b> ${item.genres.map(genre => genre.name).join(", ")}<br>
           <b>Type:</b> ${item.type}
         </div>
-        <button>Show Synopsis</button>
+        <button class="showSynopsis" role="button">Show Synopsis</button>
       `;
 
       const synopsis = listItem.querySelector(".synopsis");
